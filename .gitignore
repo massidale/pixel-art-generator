@@ -1,0 +1,9 @@
+outputs/
+__pycache__/
+*.py[cod]
+.DS_Store
+*.egg-info/
+.env
+models/
+dataset/
+notebooks/

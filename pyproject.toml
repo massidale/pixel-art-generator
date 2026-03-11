@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pixel_art_project"
+version = "0.1.0"
+description = "Dataset e modelli per pixel art con PyTorch"
+dependencies = [
+    "diffusers",
+    "transformers",
+    "accelerate",
+    "peft",
+    "torch",
+    "torchvision",
+    "tqdm",
+    "pyyaml",
+    "Pillow",
+    "gguf"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]  # Dice a Python di cercare il codice dentro la cartella 'src'
