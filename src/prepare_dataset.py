@@ -100,23 +100,23 @@ def main():
         )
         
         with torch.no_grad():
-            # CLIP embeddings
-            prompt_embeds = text_encoder_1(
+            # CLIP → pooled embedding [hidden_size]  (= pooled_prompt_embeds in FLUX)
+            pooled_prompt_embeds = text_encoder_1(
                 text_inputs_1.input_ids.to(device),
                 output_hidden_states=False
             ).pooler_output
             
-            # T5 embeddings
-            pooled_t5 = text_encoder_2(
+            # T5 → sequence embedding [seq_len, hidden_size]  (= prompt_embeds in FLUX)
+            prompt_embeds = text_encoder_2(
                 text_inputs_2.input_ids.to(device),
                 output_hidden_states=True
             ).last_hidden_state
             
-        # Save precomputed tensors
+        # Save precomputed tensors (FLUX convention: prompt_embeds=T5, pooled_prompt_embeds=CLIP)
         out_dict = {
             "latent": latent,
-            "prompt_embeds": prompt_embeds.cpu().squeeze(0),
-            "pooled_prompt_embeds": pooled_t5.cpu().squeeze(0)
+            "prompt_embeds": prompt_embeds.cpu().squeeze(0),         # [seq_len, hidden]
+            "pooled_prompt_embeds": pooled_prompt_embeds.cpu().squeeze(0)  # [hidden]
         }
         
         base_name = os.path.splitext(filename)[0]
