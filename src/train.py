@@ -52,9 +52,9 @@ def main():
     )
 
     # 1. Caricamento Modello
-    # Ottimizzazioni specifiche per Mac M2 e GGUF (da notebook)
+    # bfloat16 è supportato sia su MPS (Mac) che su GPU NVIDIA (CUDA/A100)
     device = accelerator.device
-    dtype = torch.bfloat16 if torch.backends.mps.is_available() else torch.float32
+    dtype = torch.bfloat16 if (torch.backends.mps.is_available() or torch.cuda.is_available()) else torch.float32
     
     gguf_config = GGUFQuantizationConfig(compute_dtype=dtype)
     transformer_path = resolve_path(config['model']['transformer_path'])

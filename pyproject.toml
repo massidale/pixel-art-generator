@@ -16,7 +16,8 @@ dependencies = [
     "tqdm",
     "pyyaml",
     "Pillow",
-    "gguf"
+    "gguf",
+    "huggingface-hub[cli]"
 ]
 
 [tool.setuptools.packages.find]

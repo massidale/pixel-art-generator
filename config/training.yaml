@@ -4,17 +4,20 @@ model:
 
 training:
   output_dir: "./output/flux-pixel-art-lora"
-  checkpointing_steps: 500
-  learning_rate: 1e-4
-  max_train_steps: 2000
-  train_batch_size: 1
-  gradient_accumulation_steps: 4
+  checkpointing_steps: 200          # checkpoint più frequenti su run short
+  learning_rate: 5e-5               # era 1e-4 (troppo aggressivo per dataset piccolo)
+  max_train_steps: 800              # era 2000 (su 50 img = 40 epoche, troppo overfitting)
+  train_batch_size: 4               # era 1 + grad_accum 4 → batch effettivo rimane 4, ma più veloce su A100/H100
+  gradient_accumulation_steps: 1    # era 4 (non serve con batch_size >= 4 su GPU VRAM grande)
   seed: 42
 
 lora:
   r: 16
   alpha: 32
-  target_modules: ["to_q", "to_k", "to_v", "to_out.0"]
+  target_modules: [             # aggiunti i cross-attention (add_*) per imparare meglio lo stile
+    "to_q", "to_k", "to_v", "to_out.0",
+    "add_q_proj", "add_k_proj", "add_v_proj"
+  ]
   dropout: 0.05
 
 data:
@@ -23,4 +26,3 @@ data:
 
 output:
   dir: "outputs/lora-pixel-art"
-

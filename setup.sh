@@ -24,11 +24,15 @@ MODEL_DIR="models"
 mkdir -p "$MODEL_DIR"
 
 if [ ! -f "$MODEL_DIR/flux1-schnell-Q4_K_S.gguf" ]; then
-    huggingface-cli download \
-        city96/FLUX.1-schnell-gguf \
-        flux1-schnell-Q4_K_S.gguf \
-        --local-dir "$MODEL_DIR" \
-        --local-dir-use-symlinks False
+    python -c "
+from huggingface_hub import hf_hub_download
+hf_hub_download(
+    repo_id='city96/FLUX.1-schnell-gguf',
+    filename='flux1-schnell-Q4_K_S.gguf',
+    local_dir='$MODEL_DIR',
+    local_dir_use_symlinks=False
+)
+"
     echo "✅ Model downloaded successfully."
 else
     echo "✅ Model already exists, skipping download."
